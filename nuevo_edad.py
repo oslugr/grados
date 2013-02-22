@@ -19,7 +19,7 @@ Date: 22 February 2013
 
 --------------------------------------------------------------------------------
 
-Copyright (c) 2012 Vicente Ruiz <vruiz2.0@gmail.com>
+Copyright (c) 2013 Vicente Ruiz <vruiz2.0@gmail.com>
 
 """
 
@@ -60,7 +60,7 @@ Argumentos:
 Requisitos:
 ===========
 - Python 3
-- BeautifulSoup
+- BeautifulSoup (versión 4)
 """
 
 import json
