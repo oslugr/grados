@@ -46,7 +46,15 @@ ejemplo de la estructura devuelta:
                 30: a, # a matriculaciones de 30 a 34 años
                 35: b, # b matriculaciones de 35 a 39 años
                 40: c, # c matriculaciones de 40 años o más
-            }
+            },
+            'via_acceso': {
+                'PAU': a, # a matriculaciones de PAU
+                'Credencial': b, # y matriculaciones de Credencial
+                'F.P.': c, # c matriculaciones de F.P.
+                'Titulados': d, # d matriculaciones de Titulados
+                'Mayores 25': e, # e matriculaciones de Mayores 25
+                'Otros': f, # f matriculaciones de Otros
+            },
         },
         'mujeres': {
             'total': 142, # Total de mujeres matriculadas en TITULACION
@@ -57,14 +65,23 @@ ejemplo de la estructura devuelta:
                 30: a, # a matriculaciones de 30 a 34 años
                 35: b, # b matriculaciones de 35 a 39 años
                 40: c, # c matriculaciones de 40 años o más
-            }
+            },
+            'via_acceso': {
+                'PAU': a, # a matriculaciones de PAU
+                'Credencial': b, # y matriculaciones de Credencial
+                'F.P.': c, # c matriculaciones de F.P.
+                'Titulados': d, # d matriculaciones de Titulados
+                'Mayores 25': e, # e matriculaciones de Mayores 25
+                'Otros': f, # f matriculaciones de Otros
+            },
         },
     },
     ...
 }
 
 Argumentos:
-- input: Fichero de entrada que contiene la información ofrecida por la UGR
+- input_edades: Fichero de entrada que contiene la información ofrecida por la UGR
+- input_acceso: Fichero de entrada que contiene la información ofrecida por la UGR
 - output: Argumento opcional. Si se indica, los datos obtenidos se vuelcan al
   fichero indicado. En caso de que no se indique este argumento, se muestran
   por salida estándar.
@@ -90,7 +107,7 @@ if len(sys.argv) < 3 or len(sys.argv) > 4:
 # Preparamos la salida
 output = sys.stdout
 if len(sys.argv) == 4:
-    output = open(sys.argv[2], 'w+')
+    output = open(sys.argv[3], 'w+')
 
 def male_and_female(tr_list):
     it = iter(tr_list)
