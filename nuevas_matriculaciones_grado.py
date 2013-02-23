@@ -115,6 +115,10 @@ def male_and_female(tr_list):
         yield next(it), next(it)
 
 def nuevo_por_edades(html_doc, data):
+    """
+    - html_doc - Contenido html del documento
+    - data - Diccionario donde se añadirá la información parseada
+    """
     # Cargamos el HTML con BeautifulSoup
     soup = BeautifulSoup(html_doc)
     tr_list = soup.body.tbody.find_all('tr')
@@ -180,6 +184,10 @@ def nuevo_por_edades(html_doc, data):
 
 
 def nuevo_por_via_acceso(html_doc, data):
+    """
+    - html_doc - Contenido html del documento
+    - data - Diccionario donde se añadirá la información parseada
+    """
     # Cargamos el HTML con BeautifulSoup
     soup = BeautifulSoup(html_doc)
     tr_list = soup.body.tbody.find_all('tr')
