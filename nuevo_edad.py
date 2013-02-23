@@ -29,23 +29,37 @@ Descripción:
 Parsea un fichero HTML indicado como argumento y muestra el resultado del
 análisis en formato JSON.
 
-El formato de la salida es una lista, en la cuál se incluye la información por
-sexos. El primer elemento es la información relativa a 'hombres' y el segundo
-elemento es la información relativa a 'mujeres'. Para cada sexo se incluye un
-diccionario con la siguiente estructura:
+El formato de la salida es un direccionario, en la cuál se incluye la
+información por titulaciones. Para cada titulación se incluye el total de
+matriculaciones y la información relativa a los sexos. Aquí podemos ver un
+ejemplo de la estructura devuelta:
 
 {
-    'TITULACION': [
-        230, # Total de matriculados en TITULACION para el sexo en cuestión
-        {
-            18: x, # x matriculaciones de 18 años o menos
-            19: y, # y matriculaciones de 19 años
-            ...
-            30: a, # a matriculaciones de 30 a 34 años
-            35: b, # b matriculaciones de 35 a 39 años
-            40: c, # c matriculaciones de 40 años o más
-        }
-    ],
+    'TITULACION': {
+        'total': 230, # Total de personas matriculadas en TITULACION
+        'hombres': {
+            'total': 88, # Total de hombres matriculados en TITULACION
+            'edades': {
+                18: x, # x matriculaciones de 18 años o menos
+                19: y, # y matriculaciones de 19 años
+                ...
+                30: a, # a matriculaciones de 30 a 34 años
+                35: b, # b matriculaciones de 35 a 39 años
+                40: c, # c matriculaciones de 40 años o más
+            }
+        },
+        'mujeres': {
+            'total': 142, # Total de mujeres matriculadas en TITULACION
+            'edades': {
+                18: x, # x matriculaciones de 18 años o menos
+                19: y, # y matriculaciones de 19 años
+                ...
+                30: a, # a matriculaciones de 30 a 34 años
+                35: b, # b matriculaciones de 35 a 39 años
+                40: c, # c matriculaciones de 40 años o más
+            }
+        },
+    },
     ...
 }
 
@@ -86,8 +100,7 @@ soup = BeautifulSoup(html_doc)
 tr_list = soup.body.tbody.find_all('tr')
 
 # Estructuras para almacenar los datos
-male_data = {}
-female_data = {}
+data = {}
 
 def male_and_female(tr_list):
     it = iter(tr_list)
@@ -95,7 +108,7 @@ def male_and_female(tr_list):
         yield next(it), next(it)
 
 def parse_tr(td_list):
-    titulacion = td_list[2].get_text()
+    titulacion = td_list[2].get_text().replace('\n ', '')
     if titulacion:
         facultad = td_list[0].get_text()
         try:
@@ -129,18 +142,28 @@ def parse_tr(td_list):
     return None, None, None, None, None, None
     
 
-for tr_male, tr_female in male_and_female(tr_list[8:]):
+for tr_male, tr_female in male_and_female(tr_list[10:]):
     td_male_list = tr_male.find_all('td')
     facultad, total, titulacion, total_titulacion, total_sexo, edades = parse_tr(td_male_list)
-    male_data[titulacion] = [total_sexo, edades]
+    print('2', titulacion)
+    data[titulacion] = {
+        'total': total_titulacion,
+        'hombres': {
+            'total': total_sexo,
+            'edades': edades,
+        }
+    }
     
     td_female_list = tr_female.find_all('td')
     facultad, total, titulacion, total_titulacion, total_sexo, edades = parse_tr(td_female_list)
-    female_data[titulacion] = [total_sexo, edades]
-
+    print('1', titulacion)
+    data[titulacion]['mujeres'] = {
+        'total': total_sexo,
+        'edades': edades,
+    }
 
 # Preparamos los datos en JSON
-json_data = json.dumps([male_data, female_data])
+json_data = json.dumps(data)
 # Mostramos el resultado
 output.write(json_data)
 output.close()
